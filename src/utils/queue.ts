@@ -1,8 +1,10 @@
 import ampqlib, { Channel, Connection } from 'amqplib';
 
+import logger from './logger';
+
 interface ConnectionParameter {
   host: string;
-  port: string;
+  port: number;
 }
 
 interface MessageQueue {
@@ -22,11 +24,14 @@ class RabbitMQueue implements MessageQueue {
   }
 
   async createConnection() {
-    if (this.connection) return;
+    if (this.connection) return this.connection;
 
-    this.connection = await ampqlib.connect(
-      `ampqlib://${this._connectionParameter.host}:${this._connectionParameter.port}`
+    const connection = await ampqlib.connect(
+      `amqp://${this._connectionParameter.host}:${this._connectionParameter.port}`
     );
+    this.bindConnection(connection);
+
+    return connection;
   }
 
   getConnection() {
@@ -36,11 +41,14 @@ class RabbitMQueue implements MessageQueue {
   bindConnection(connection: Connection) {
     if (this.connection) return;
 
+    logger.info('Binding RabbitMQ connection');
     this.connection = connection;
   }
 
-  async createChannel(connection: Connection) {
-    const channel = await connection.createChannel();
+  async createChannel() {
+    if (!this.connection) return;
+
+    const channel = await this.connection.createChannel();
 
     return channel;
   }
