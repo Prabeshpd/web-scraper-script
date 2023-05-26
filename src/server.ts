@@ -1,54 +1,38 @@
-import dotenv from 'dotenv';
+import config from './config';
+import Queue from './utils/queue';
+import { insertSearchResultForUserTags } from './services/searchResult';
 
-type ENV = 'local' | 'test';
-interface Configuration {
-  env: ENV;
-  port: string | number;
-  logger: {
-    prettyPrint: boolean;
-  };
-  database: {
-    test: {
-      host: string;
-      port: number;
-      user: string;
-      password: string;
-      database: string;
-    };
-    local: {
-      host: string;
-      port: number;
-      user: string;
-      password: string;
-      database: string;
-    };
-  };
+interface Message {
+  userId: number
 }
 
-dotenv.config();
+const processEnv = config.env;
+const connectionParameter = config.rabbitMQ[processEnv];
+const queue = new Queue(connectionParameter);
 
-const config: Configuration = {
-  env: process.env.ENV == 'test' ? 'test' : 'local',
-  port: process.env.EXPRESS_PORT || '3000',
-  logger: {
-    prettyPrint: process.env.ENV !== 'production'
-  },
-  database: {
-    test: {
-      host: process.env.DB_TEST_HOST || 'localhost',
-      port: (process.env.DB_TEST_PORT && +process.env.DB_TEST_PORT) || 5432,
-      user: process.env.DB_TEST_USER || 'postgres',
-      password: process.env.DB_TEST_PASSWORD || 'Admin@1234',
-      database: process.env.DB_TEST_DATABASE || 'scraper'
-    },
-    local: {
-      host: process.env.DB_HOST || 'localhost',
-      port: (process.env.DB_PORT && +process.env.DB_PORT) || 5432,
-      user: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD || 'Admin@1234',
-      database: process.env.DB_DATABASE || 'scraper'
+async function startConnection() {
+  try {
+    const connection = await queue.createConnection();
+
+    queue.bindConnection(connection);
+    const channel = await queue.createChannel();
+
+    if (!channel) {
+      throw new Error('Rabbit MQ not set properly');
     }
-  }
-};
 
-export default config;
+    await queue.assertQueue(channel, 'SearchResult');
+
+    channel.consume('SearchResult', async (message) => {
+      if (!message?.content) return;
+      console.log(message.content.toString())
+      const data = await JSON.parse(message?.content.toString()) as Message;
+      await insertSearchResultForUserTags(data.userId);
+      channel.ack(message);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+startConnection();

@@ -17,10 +17,10 @@ export async function loadSearchResults(key: string) {
   const { data } = await axios.get(`https://www.google.com/search?q=${key}&hl=en`, { headers });
   const parsedHtml = load(data);
   const statResult = getStatResult(parsedHtml);
-  const links = getLinks(parsedHtml);
+  const linksCount = getLinksLength(parsedHtml);
   const adsLength = getTotalNumberOfAds(parsedHtml);
 
-  console.log(adsLength, { statResult }, links);
+  return {linksCount, adsLength, statResult, htmlPage: data}
 }
 
 function getTotalNumberOfAds(cheerioElement: CheerioAPI) {
@@ -28,7 +28,7 @@ function getTotalNumberOfAds(cheerioElement: CheerioAPI) {
   return adElements.length;
 }
 
-function getLinks(cheerioElement: CheerioAPI) {
+function getLinksLength(cheerioElement: CheerioAPI) {
   const links: string[] = [];
   const linksHtml = cheerioElement('.yuRUbf');
   const adsLinksHtml = cheerioElement('.uEierd');
@@ -40,7 +40,7 @@ function getLinks(cheerioElement: CheerioAPI) {
     const adsLink = cheerioElement(adsLinkHtml).find('a.sVXRqc').attr('href');
     if (adsLink) links.push(adsLink);
   }
-  return links;
+  return links.length;
 }
 
 function getStatResult(cheerioElement: CheerioAPI) {
