@@ -25,7 +25,7 @@ async function startConnection() {
 
     channel.consume('SearchResult', async (message) => {
       if (!message?.content) return;
-      const data = await JSON.parse(message?.content.toString()) as Message;
+      const data = (await JSON.parse(message?.content.toString())) as Message;
       await insertSearchResultForUserTags(data.userId);
       channel.ack(message);
     });
