@@ -20,7 +20,7 @@ export async function loadSearchResults(key: string) {
   const linksCount = getLinksLength(parsedHtml);
   const adsLength = getTotalNumberOfAds(parsedHtml);
 
-  return {linksCount, adsLength, statResult, htmlPage: data}
+  return { linksCount, adsLength, statResult, htmlPage: data };
 }
 
 function getTotalNumberOfAds(cheerioElement: CheerioAPI) {

@@ -3,7 +3,7 @@ import Queue from './utils/queue';
 import { insertSearchResultForUserTags } from './services/searchResult';
 
 interface Message {
-  userId: number
+  userId: number;
 }
 
 const processEnv = config.env;
@@ -25,8 +25,8 @@ async function startConnection() {
 
     channel.consume('SearchResult', async (message) => {
       if (!message?.content) return;
-      console.log(message.content.toString())
-      const data = await JSON.parse(message?.content.toString()) as Message;
+      console.log(message.content.toString());
+      const data = (await JSON.parse(message?.content.toString())) as Message;
       await insertSearchResultForUserTags(data.userId);
       channel.ack(message);
     });

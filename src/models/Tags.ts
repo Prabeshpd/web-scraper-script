@@ -17,10 +17,7 @@ class Tag extends BaseModel {
   public static table = 'tags';
 
   public static async fetch(user_id: number) {
-
-    return this.buildQuery<TagDetail>((qb) =>
-      qb.select().from(this.table).where('user_id', user_id)
-    );
+    return this.buildQuery<TagDetail>((qb) => qb.select().from(this.table).where('user_id', user_id));
   }
 }
 

@@ -31,8 +31,8 @@ interface Configuration {
     local: {
       host: string;
       port: number;
-    }
-  }
+    };
+  };
 }
 
 dotenv.config();
@@ -62,11 +62,11 @@ const config: Configuration = {
   rabbitMQ: {
     test: {
       host: process.env.RABBIT_MQ_HOST || 'localhost',
-      port: +(process.env.RABBIT_MQ_PORT || 5672),
+      port: +(process.env.RABBIT_MQ_PORT || 5672)
     },
     local: {
       host: process.env.RABBIT_MQ_HOST || 'localhost',
-      port: +(process.env.RABBIT_MQ_PORT || 5672),
+      port: +(process.env.RABBIT_MQ_PORT || 5672)
     }
   }
 };

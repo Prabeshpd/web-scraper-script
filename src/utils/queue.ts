@@ -1,6 +1,6 @@
 import ampqlib, { Channel, Connection } from 'amqplib';
 
-import logger from './logger'
+import logger from './logger';
 
 interface ConnectionParameter {
   host: string;
@@ -46,7 +46,7 @@ class RabbitMQueue implements MessageQueue {
   }
 
   async createChannel() {
-    if(!this.connection) return;
+    if (!this.connection) return;
 
     const channel = await this.connection.createChannel();
 
