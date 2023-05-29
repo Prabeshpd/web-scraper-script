@@ -33,6 +33,13 @@ interface Configuration {
       port: number;
     };
   };
+  scrapperClassNames: {
+    searchLinksParentClass: string;
+    adLinksParentClass: string;
+    linkElement: string;
+    linkElementAttribute: string;
+    adLinkAnchorElementClass: string;
+  };
 }
 
 dotenv.config();
@@ -68,6 +75,13 @@ const config: Configuration = {
       host: process.env.RABBIT_MQ_HOST || 'localhost',
       port: +(process.env.RABBIT_MQ_PORT || 5672)
     }
+  },
+  scrapperClassNames: {
+    searchLinksParentClass: process.env.SEARCH_LINKS_PARENT_CLASS || '.yuRUbf',
+    adLinksParentClass: process.env.AD_LINKS_PARENT_CLASS || '.uEierd',
+    linkElement: process.env.LINK_ELEMENT || 'a',
+    linkElementAttribute: process.env.LINK_ELEMENT_ATTRIBUTE || 'href',
+    adLinkAnchorElementClass: process.env.AD_LINK_ANCHOR_ELEMENT_CLASS || '.sVXRqc'
   }
 };
 
