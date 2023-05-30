@@ -56,6 +56,6 @@ export function getLinksLength(cheerioElement: cheerio.CheerioAPI) {
   return links.length;
 }
 
-export function getStatResult(cheerioElement: cheerio.CheerioAPI) {
-  return cheerioElement('#result-stats').text();
+function getStatResult(cheerioElement: cheerio.CheerioAPI) {
+  return cheerioElement(scrapperClassNames.statResultId).text();
 }
