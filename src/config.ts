@@ -39,6 +39,7 @@ interface Configuration {
     linkElement: string;
     linkElementAttribute: string;
     adLinkAnchorElementClass: string;
+    statResultId: string;
   };
 }
 
@@ -81,7 +82,8 @@ const config: Configuration = {
     adLinksParentClass: process.env.AD_LINKS_PARENT_CLASS || '.uEierd',
     linkElement: process.env.LINK_ELEMENT || 'a',
     linkElementAttribute: process.env.LINK_ELEMENT_ATTRIBUTE || 'href',
-    adLinkAnchorElementClass: process.env.AD_LINK_ANCHOR_ELEMENT_CLASS || '.sVXRqc'
+    adLinkAnchorElementClass: process.env.AD_LINK_ANCHOR_ELEMENT_CLASS || '.sVXRqc',
+    statResultId: process.env.STAT_RESULT_ID || '#result-stats'
   }
 };
 
