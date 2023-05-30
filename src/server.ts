@@ -7,6 +7,10 @@ interface Message {
 }
 
 const processEnv = config.env;
+const {
+  rabbitMQ: { events }
+} = config;
+
 const connectionParameter = config.rabbitMQ[processEnv];
 const queue = new Queue(connectionParameter);
 
@@ -21,9 +25,9 @@ async function startConnection() {
       throw new Error('Rabbit MQ not set properly');
     }
 
-    await queue.assertQueue(channel, 'SearchResult');
+    await queue.assertQueue(channel, events.searchTags);
 
-    channel.consume('SearchResult', async (message) => {
+    channel.consume(events.searchTags, async (message) => {
       if (!message?.content) return;
       const data = (await JSON.parse(message?.content.toString())) as Message;
       await insertSearchResultForUserTags(data.userId);

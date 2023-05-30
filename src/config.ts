@@ -32,6 +32,9 @@ interface Configuration {
       host: string;
       port: number;
     };
+    events: {
+      searchTags: string;
+    };
   };
   scrapperClassNames: {
     searchLinksParentClass: string;
@@ -75,6 +78,9 @@ const config: Configuration = {
     local: {
       host: process.env.RABBIT_MQ_HOST || 'localhost',
       port: +(process.env.RABBIT_MQ_PORT || 5672)
+    },
+    events: {
+      searchTags: process.env.RABBIT_MQ_EVENTS_SEARCH_TAGS || 'SEARCH_TAGS'
     }
   },
   scrapperClassNames: {
