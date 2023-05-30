@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { load, CheerioAPI } from 'cheerio';
+import * as cheerio from 'cheerio';
 
 import config from '../config';
 
@@ -22,20 +22,19 @@ export async function loadSearchResults(key: string) {
   const userAgent = userAgents[randomNumber];
   let headers = { 'User-Agent': userAgent };
   const { data } = await axios.get(`https://www.google.com/search?q=${key}&hl=en`, { headers });
-  const parsedHtml = load(data);
+  const parsedHtml = cheerio.load(data);
   const statResult = getStatResult(parsedHtml);
   const linksCount = getLinksLength(parsedHtml);
   const adsLength = getTotalNumberOfAds(parsedHtml);
-
   return { linksCount, adsLength, statResult, htmlPage: data };
 }
 
-function getTotalNumberOfAds(cheerioElement: CheerioAPI) {
+export function getTotalNumberOfAds(cheerioElement: cheerio.CheerioAPI) {
   const adElements = cheerioElement(scrapperClassNames.adLinksParentClass);
   return adElements.length;
 }
 
-function getLinksLength(cheerioElement: CheerioAPI) {
+export function getLinksLength(cheerioElement: cheerio.CheerioAPI) {
   const links: string[] = [];
   const linksHtml = cheerioElement(scrapperClassNames.searchLinksParentClass);
   const adsLinksHtml = cheerioElement(scrapperClassNames.adLinksParentClass);
@@ -57,6 +56,6 @@ function getLinksLength(cheerioElement: CheerioAPI) {
   return links.length;
 }
 
-function getStatResult(cheerioElement: CheerioAPI) {
+function getStatResult(cheerioElement: cheerio.CheerioAPI) {
   return cheerioElement(scrapperClassNames.statResultId).text();
 }
