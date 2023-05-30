@@ -25,7 +25,8 @@ export async function loadSearchResults(key: string) {
   const parsedHtml = cheerio.load(data);
   const statResult = getStatResult(parsedHtml);
   const linksCount = getLinksLength(parsedHtml);
-  const adsLength = getTotalNumberOfAds(parsedHtml);  return { linksCount, adsLength, statResult, htmlPage: data };
+  const adsLength = getTotalNumberOfAds(parsedHtml);
+  return { linksCount, adsLength, statResult, htmlPage: data };
 }
 
 export function getTotalNumberOfAds(cheerioElement: cheerio.CheerioAPI) {
