@@ -9,7 +9,7 @@ RUN yarn build
 
 FROM builder AS dependencies
 WORKDIR /web-scraper-script
-COPY ["package.json", "yarn.lock", "./"]
+COPY ["package.json", "yarn.lock",  "./"]
 RUN yarn --prod
 
 
