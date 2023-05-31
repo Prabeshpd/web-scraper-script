@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Prabeshpd/web-scraper-script/compare/web-scraper-script@1.0.0...web-scraper-script@1.0.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* add error handler to log the error on scraping ([f253963](https://github.com/Prabeshpd/web-scraper-script/commit/f253963796318890c5c5485539191229b4f6935d))
+
 # 1.0.0 (2023-05-30)
 
 
